@@ -1,17 +1,19 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AppService } from './app.service';
+import { CsvBody } from './interface/csvInterface';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getUserData() {
+    return this.appService.getUserData();
   }
 
   @Post()
-  saveUserData() {
-
+  saveUserData(@Body() userDetail: CsvBody) {
+    console.log(userDetail)
+    return this.appService.saveUserData(userDetail);
   }
 }
