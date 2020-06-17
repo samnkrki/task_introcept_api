@@ -12,7 +12,7 @@ export class AppService {
       fs.createReadStream('userlist.csv')
         .on('error', (err) => {
           // console.log('error', err)
-          reject({ success: false, message: "file not found", err })
+          reject({ success: false, message: "Error reading csv file", err })
         })
         .pipe(csv())
         .on('data', (row) => {
