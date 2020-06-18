@@ -1,21 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CsvHeader, CsvBody } from './interface/csvInterface';
-import { resolve } from 'path';
 const fs = require('fs');
 const csv = require('csv-parser')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 @Injectable()
 export class AppService {
-  getUserData() {
+  getUserData(): Promise<{}> {
     return new Promise((resolve, reject) => {
       const userDetails = []
       fs.createReadStream('userlist.csv')
         .on('error', (err) => {
-          // console.log('error', err)
-          reject({ success: false, message: "Error reading csv file", err })
+          reject({ success: false, message: "Error getting data" })
         })
-        .pipe(csv({ columns: true }))
+        .pipe(csv())
         .on('data', (row) => {
           userDetails.push(row)
         })
@@ -26,8 +24,10 @@ export class AppService {
     })
   }
 
-  saveUserData(userDetail: CsvBody) {
+  saveUserData(userDetail: CsvBody): Promise<{}> {
+    userDetail._id = this.generateRandomId()
     const header: CsvHeader[] = [
+      { id: "_id", title: "_id" },
       { id: 'name', title: 'name' },
       { id: 'educationBackground', title: 'educationBackground' },
       { id: 'email', title: 'email' },
@@ -52,7 +52,7 @@ export class AppService {
             .then(() => {
               resolve({
                 success: true,
-                message: "The CSV file was written successfully"
+                message: "Data saved successfully"
               })
             })
         })
@@ -67,12 +67,23 @@ export class AppService {
             .then(() => {
               resolve({
                 success: true,
-                message: "The CSV file was written successfully for the first time"
+                message: "Data saved successfully"
               })
             })
         })
     })
 
 
+  }
+
+  private generateRandomId(): string {
+    const length = 5
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = ""
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result
   }
 }
