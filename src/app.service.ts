@@ -6,6 +6,18 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 @Injectable()
 export class AppService {
+  private header: CsvHeader[] = [
+    { id: "_id", title: "_id" },
+    { id: 'name', title: 'name' },
+    { id: 'educationBackground', title: 'educationBackground' },
+    { id: 'email', title: 'email' },
+    { id: 'gender', title: 'gender' },
+    { id: 'dob', title: 'dob' },
+    { id: 'nationality', title: 'nationality' },
+    { id: 'phone', title: 'phone' },
+    { id: 'prefModeContact', title: 'prefModeContact' },
+    { id: "address", title: "address" }
+  ]
   getUserData(): Promise<{}> {
     return new Promise((resolve, reject) => {
       const userDetails = []
@@ -26,24 +38,12 @@ export class AppService {
 
   saveUserData(userDetail: CsvBody): Promise<{}> {
     userDetail._id = this.generateRandomId()
-    const header: CsvHeader[] = [
-      { id: "_id", title: "_id" },
-      { id: 'name', title: 'name' },
-      { id: 'educationBackground', title: 'educationBackground' },
-      { id: 'email', title: 'email' },
-      { id: 'gender', title: 'gender' },
-      { id: 'dob', title: 'dob' },
-      { id: 'nationality', title: 'nationality' },
-      { id: 'phone', title: 'phone' },
-      { id: 'prefModeContact', title: 'prefModeContact' },
-      { id: "address", title: "address" }
-    ]
     return new Promise((resolve, reject) => {
       fs.createReadStream('userlist.csv')
         .on('data', () => {
           const csvWriter = createCsvWriter({
             path: 'userlist.csv',
-            header,
+            header: this.header,
             append: true
           });
           const data = [userDetail];
@@ -59,7 +59,7 @@ export class AppService {
         .on('error', () => {
           const csvWriter = createCsvWriter({
             path: 'userlist.csv',
-            header,
+            header: this.header,
           });
           const data = [userDetail];
           return csvWriter
