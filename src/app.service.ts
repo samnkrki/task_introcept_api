@@ -6,6 +6,10 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 @Injectable()
 export class AppService {
+  sayHello(): string {
+    return 'Welcome to the API'
+  }
+
   private header: CsvHeader[] = [
     { id: "_id", title: "_id" },
     { id: 'name', title: 'name' },

@@ -6,6 +6,10 @@ import { CsvBody } from './interface/csvInterface';
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
+  @Get()
+  getStartPageText(): string {
+    return this.appService.sayHello()
+  }
   @Get("/getLists")
   getUserData(): Promise<{}> {
     return this.appService.getUserData();
