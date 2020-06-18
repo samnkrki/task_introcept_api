@@ -6,14 +6,13 @@ import { CsvBody } from './interface/csvInterface';
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
-  @Get()
-  getUserData() {
+  @Get("/getLists")
+  getUserData(): Promise<{}> {
     return this.appService.getUserData();
   }
 
-  @Post()
-  saveUserData(@Body() userDetail: CsvBody) {
-    console.log(userDetail)
+  @Post("/saveInformation")
+  saveUserData(@Body() userDetail: CsvBody): Promise<{}> {
     return this.appService.saveUserData(userDetail);
   }
 }
