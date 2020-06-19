@@ -59,16 +59,36 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+## Explanation
+When the api is called to save the data, it first validates for the data and if the data is invalid, it sends validation error messages as response. To enable validations, a middleware needs to be created like this "app.useGlobalPipes(new ValidateInputPipe())". If the data is valid, it starts further processing and sends to the controller which sends to service. A file is checked, if it doesn't exist it is created with a header and data is saved. If the file already exists, data is appended to it. The response is sent as success(true or false) depending on the success or failure of the operation.
+To get the list of data, another api is called with a 'get' request and it returns the data or error depending upon the response. Since promises are used, the response is either a resolved or rejected one. Rejected responses are not sent automatically, they need to be caught before being sent. So a new middleware is created called anyExceptionFilter to send the response in case of rejection.
 
-## Support
+## Packages
+### Csv parser and Csv writer
+Like their name suggests, they are used to read from and write to csv respectively. Csv writer comes with modes to write a new file every time or append to the existing one. Unfortunately, when appending headers are not available in the csv file.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Class validator
+It is used for api validation of the requests. It contains useful validators ranging from checking empty to enum validator and checking strings.
 
-## Stay in touch
+## CI/CD Pipeline
+### Wercker
+It is a continuous delivery platform that runs all the scripts listed in your local wercker.yml code. You can place any scripts you want to run after the code is pushed to github and it runs everything. With the help of this, builds and testing processes and other processes can be automated.
+Steps:
+1. Go to the wercker website and set up your account. Click on the new application on the dashboard and add your code repo. Github is an option among others. Select the intended repository and it prompts you to add the wercker.yml file to your local code and push it to git if your code lacks it. You can choose your project type to generate a yml file dynamically. For javascript projects, choose nodejs.
+2. You are done. Once you push the code on git, the wercker runs automated tasks.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Code Quality Check
+### Codeclimate
+Codeclimate checks your code for various malpractices including duplicates, complexity and the standard. Once your repo is run through code climate, it gives you a result with "smelly codes", duplicate ones with a maintainability index. You can choose between various filters to check the problem areas in your code.
+
+## Deployment with heroku
+If you have the heroku cli, you can repeat the following steps to deploy.
+1. Go to your project folder and open a terminal. Create a file with the name Procfile and add the command you want to execute when the app starts. Our command will be "web: npm run start:prod" which tells us when a process named web starts run the given command. Commit the file.
+2. Change the "ts-node" dev dependency to dependency because during heroku deployment, devDependencies are not installed and you need ts-node for compiling ts and module resolution.
+3. Run "heroku create". It creates a remote url and origin for heroku just like a git. 
+4. Now you just have to push the code to the origin which is heroku in our case. The command is "git push heroku master"
+5. You are done.
+6. If you want to rename your app(because heroku gives a random name to your app), you can use "heroku apps: rename NEWNAME" from the project folder.
 
 ## License
 
