@@ -90,6 +90,8 @@ If you have the heroku cli, you can repeat the following steps to deploy.
 5. You are done.
 6. If you want to rename your app(because heroku gives a random name to your app), you can use "heroku apps: rename NEWNAME" from the project folder.
 
+The code is deployed [here](https://taskapi101.herokuapp.com)
+
 ## License
 
   Nest is [MIT licensed](LICENSE).
